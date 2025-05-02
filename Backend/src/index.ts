@@ -1,14 +1,34 @@
 import express from 'express';
+import { sequelize } from './database/db';
+import dotenv from 'dotenv';
+import cors from 'cors';
+
+dotenv.config();
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 3000;
 
-app.use(express.json()); // дозволяє читати JSON тіла запитів
+app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.send('Сервер працює ✅');
+app.use(
+  cors({
+    origin: 'http://localhost:5173',
+    credentials: true,
+  })
+);
+
+app.get('/api/test', (req, res) => {
+  res.json({ message: 'Backend is working!' });
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 Сервер запущено на http://localhost:${PORT}`);
-});
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log('✅ Connected to PostgreSQL');
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on http://localhost:${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error('❌ Unable to connect to DB:', err);
+  });
