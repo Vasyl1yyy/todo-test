@@ -1,10 +1,48 @@
+import { useState } from 'react';
+import SignUp from './components/sign/sign-up/sign-up';
+import SignIn from './components/sign/sign-in/sign-in';
+import { useStore } from './store/userStore';
+import Tasks from './components/tasks/tasks';
+
 export default function App() {
-  return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
-      <h1 className="text-4xl font-bold text-gray-800">Welcome to My App</h1>
-      <p className="mt-4 text-lg text-gray-600">
-        This is a simple React app with Tailwind CSS.
-      </p>
-    </div>
-  );
+  const user = useStore((state) => state.user);
+  const [isSignUp, setIsSignUp] = useState(false);
+
+  const Pages = () => {
+    if (user === null) {
+      if (!isSignUp) {
+        return (
+          <div className="flex flex-col items-center justify-center h-screen">
+            <SignUp />{' '}
+            <button
+              className="border-2 border-black"
+              onClick={() => setIsSignUp(true)}
+            >
+              sign in
+            </button>
+          </div>
+        );
+      } else {
+        return (
+          <div className="flex flex-col items-center justify-center h-screen">
+            <SignIn />{' '}
+            <button
+              className="border-2 border-black"
+              onClick={() => setIsSignUp(false)}
+            >
+              sign up
+            </button>
+          </div>
+        );
+      }
+    } else {
+      return (
+        <div className="flex flex-col items-center justify-center h-screen">
+          <Tasks />
+        </div>
+      );
+    }
+  };
+
+  return <div>{Pages()}</div>;
 }

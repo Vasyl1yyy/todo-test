@@ -2,6 +2,7 @@ import express from 'express';
 import { sequelize } from './database/db';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import authRoutes from './router/authRoute';
 
 dotenv.config();
 
@@ -17,9 +18,7 @@ app.use(
   })
 );
 
-app.get('/api/test', (req, res) => {
-  res.json({ message: 'Backend is working!' });
-});
+app.use('/api', authRoutes);
 
 sequelize
   .authenticate()
