@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useStore } from '../../../store/userStore';
+import { Register } from '../../../api/api';
 
 export default function SignUp() {
   const [username, setUsername] = useState('');
@@ -12,52 +13,43 @@ export default function SignUp() {
     e.preventDefault();
     console.log('Submitting form...');
 
-    const response = await fetch('http://localhost:3000/api/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ username: username, password: password }),
-    });
+    const data = await Register(username, password);
 
-    const data = await response.json();
-    setUser({
-      id: data.user,
-      username: data.username,
-    });
-    if (response.ok) {
-      console.log('Registration successful:', data);
-    } else {
-      console.error('Registration failed:', data.message);
+    if (data) {
+      setUser({
+        id: data.id,
+        username: data.username,
+      });
     }
+    console.log('Registration successful:', data);
   };
 
   return (
     <div className="flex flex-col items-center justify-center mb-7">
-      <h1>sign up</h1>
+      <h1 className="font-bold">sign up</h1>
       <div>
         <div>
-          <p>Username</p>
+          <p className="ml-3">Username</p>
           <input
-            className="border-2 border-black"
+            className="border-2 border-black rounded-2xl p-2 m-2 mt-0"
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
         </div>
         <div>
-          <p>password</p>
+          <p className="ml-3">Password</p>
           <input
-            className="border-2 border-black"
+            className="border-2 border-black rounded-2xl p-2 m-2 mt-0"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
         <div>
-          <p>password</p>
+          <p className="ml-3">Password</p>
           <input
-            className="border-2 border-black"
+            className="border-2 border-black rounded-2xl p-2 m-2 mt-0"
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
@@ -66,7 +58,7 @@ export default function SignUp() {
       </div>
       <div>
         <button
-          className="border-2 border-black cursor-pointer"
+          className="border-2 border-black cursor-pointer rounded-2xl p-2 m-2 mt-0 hover:bg-black hover:text-white transition"
           onClick={(e) => handleSubmit(e)}
         >
           Sign Up

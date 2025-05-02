@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import SignUp from './components/sign/sign-up/sign-up';
 import SignIn from './components/sign/sign-in/sign-in';
+import SignUp from './components/sign/sign-up/sign-up';
 import { useStore } from './store/userStore';
 import Tasks from './components/tasks/tasks';
 
@@ -15,10 +15,10 @@ export default function App() {
           <div className="flex flex-col items-center justify-center h-screen">
             <SignUp />{' '}
             <button
-              className="border-2 border-black"
+              className="border-2 border-black cursor-pointer rounded-2xl p-2 m-2 mt-0 hover:bg-black hover:text-white transition"
               onClick={() => setIsSignUp(true)}
             >
-              sign in
+              sign up
             </button>
           </div>
         );
@@ -27,7 +27,7 @@ export default function App() {
           <div className="flex flex-col items-center justify-center h-screen">
             <SignIn />{' '}
             <button
-              className="border-2 border-black"
+              className="border-2 border-black cursor-pointer rounded-2xl p-2 m-2 mt-0 hover:bg-black hover:text-white transition"
               onClick={() => setIsSignUp(false)}
             >
               sign up

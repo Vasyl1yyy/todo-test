@@ -2,7 +2,8 @@ import express from 'express';
 import { sequelize } from './database/db';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import authRoutes from './router/authRoute';
+import taskRoute from './router/taskRoute';
+import authRoute from './router/authRoute';
 
 dotenv.config();
 
@@ -18,7 +19,8 @@ app.use(
   })
 );
 
-app.use('/api', authRoutes);
+app.use('/api', taskRoute);
+app.use('/api', authRoute);
 
 sequelize
   .authenticate()

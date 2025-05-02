@@ -1,59 +1,53 @@
 import { useState } from 'react';
 import { useStore } from '../../../store/userStore';
+import { Login } from '@/api/api';
+import { useTaskStore } from '@/store/taskStore';
 
 export default function SignIn() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const setUser = useStore((state) => state.setUser);
+  const setTasks = useTaskStore((state) => state.setTasks);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Submitting form...');
 
-    const response = await fetch('http://localhost:3000/api/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ username: username, password: password }),
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      console.log('Login successful:', data);
+    const data = await Login(username, password);
+    if (data) {
       setUser({
-        id: data.user,
+        id: data.id,
         username: data.username,
       });
-    } else {
-      console.error('Login failed:', data.message);
+      setTasks(data.tasks);
+      console.log('Tasks:', data.tasks);
     }
+    console.log('Login successful:', data);
   };
 
   return (
     <div className="flex flex-col items-center justify-center mb-7">
-      <h1>Sign In</h1>
+      <h1 className="font-bold">Sign In</h1>
       <div>
-        <p>Username</p>
+        <p className="ml-3">Username</p>
         <input
-          className="border-2 border-black"
+          className="border-2 border-black rounded-2xl p-2 m-2 mt-0"
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
       </div>
       <div>
-        <p>password</p>
+        <p className="ml-3">password</p>
         <input
-          className="border-2 border-black"
+          className="border-2 border-black rounded-2xl p-2 m-2 mt-0"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
       </div>
       <button
-        className="border-2 border-black"
+        className="border-2 border-black cursor-pointer rounded-2xl p-2 m-2 mt-0 hover:bg-black hover:text-white transition"
         onClick={(e) => handleSubmit(e)}
       >
         Sign In
