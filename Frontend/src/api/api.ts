@@ -11,6 +11,7 @@ export const Register = async (username: string, password: string) => {
 
   if (response.ok) {
     console.log('Login successful:', data);
+    localStorage.setItem('token', JSON.stringify(data.token));
     return {
       id: data.id,
       username: data.username,
@@ -45,6 +46,7 @@ export const Login = async (username: string, password: string) => {
 
   if (response.ok) {
     console.log('Login successful:', data);
+    localStorage.setItem('token', JSON.stringify(data.token));
     return {
       id: data.id,
       username: data.username,
@@ -94,5 +96,28 @@ export const UpdateTask = async (id: number, userId: number) => {
     return data;
   } else {
     console.error('Task update failed:', data.message);
+  }
+};
+
+export const VerifyToken = async (token: string) => {
+  const response = await fetch('http://localhost:3000/api/token', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ token }),
+  });
+
+  const data = await response.json();
+
+  if (response.ok) {
+    console.log('Token verified successfully:', data);
+    return {
+      id: data.id,
+      username: data.username,
+      tasks: data.tasks,
+    };
+  } else {
+    console.error('Token verification failed:', data.message);
   }
 };
